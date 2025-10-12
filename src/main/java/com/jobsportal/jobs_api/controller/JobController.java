@@ -45,4 +45,11 @@ public class JobController {
     public Job createJob(@RequestBody Job job) {
         return jobRepository.save(job);
     }
+
+    @GetMapping("/{id}")
+    public Job getJobById(@PathVariable Long id) {
+        return jobRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Job not found"));
+    }
+
 }
