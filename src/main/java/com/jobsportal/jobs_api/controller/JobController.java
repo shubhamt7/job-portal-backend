@@ -1,6 +1,7 @@
 package com.jobsportal.jobs_api.controller;
 import com.jobsportal.jobs_api.entity.Job;
 import com.jobsportal.jobs_api.repository.JobRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,7 +20,7 @@ public class JobController {
     // Fetch all jobs
     @GetMapping
     public List<Job> getAllJobs() {
-        return jobRepository.findAll();
+        return jobRepository.findAll(Sort.by(Sort.Direction.DESC, "postedOn"));
     }
 
     // Fetch jobs by city
@@ -48,8 +49,14 @@ public class JobController {
 
     @GetMapping("/{id}")
     public Job getJobById(@PathVariable Long id) {
-        return jobRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Job not found"));
+        Job job = null;
+        try{
+            job = jobRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Job not found"));
+        }catch(Exception ex){
+            System.out.println(ex.toString());
+        }
+        return job;
     }
 
 }
